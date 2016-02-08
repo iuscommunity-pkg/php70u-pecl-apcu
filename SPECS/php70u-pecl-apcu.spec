@@ -56,14 +56,6 @@ Provides:       php-pecl(%{pecl_name})%{?_isa} = %{version}
 Provides:       %{php_base}-pecl(%{pecl_name}) = %{version}
 Provides:       %{php_base}-pecl(%{pecl_name})%{?_isa} = %{version}
 
-# Same provides than APC, this is a drop in replacement
-Provides:       php-apc = %{version}
-Provides:       php-apc%{?_isa} = %{version}
-Provides:       php-pecl-apc = %{version}
-Provides:       php-pecl-apc%{?_isa} = %{version}
-Provides:       php-pecl(APC) = %{version}
-Provides:       php-pecl(APC)%{?_isa} = %{version}
-
 # conflict with the stock name
 Conflicts:      php-pecl-%{pecl_name} < %{version}
 
@@ -100,8 +92,6 @@ Summary:       APCu developer files (header)
 Group:         Development/Libraries
 Requires:      %{name}%{?_isa} = %{version}-%{release}
 Requires:      %{php_base}-devel%{?_isa}
-Provides:      php-pecl-apc-devel = %{version}-%{release}
-Provides:      php-pecl-apc-devel%{?_isa} = %{version}-%{release}
 Provides:      php-pecl-%{pecl_name}-devel = %{version}
 Provides:      php-pecl-%{pecl_name}-devel%{?_isa} = %{version}
 Conflicts:     php-pecl-%{pecl_name}-devel < %{version}
@@ -117,7 +107,6 @@ BuildArch:     noarch
 Requires:      %{name} = %{version}-%{release}
 Requires:      mod_php70u
 Requires:      %{php_base}-gd
-Provides:      apc-panel = %{version}-%{release}
 Provides:      apcu-panel = %{version}
 Conflicts:     apcu-panel < %{version}
 
@@ -272,6 +261,7 @@ fi
 * Mon Feb 08 2016 Carl George <carl.george@rackspace.com> - 5.1.3-1.ius
 - Latest upstream
 - Port from Fedora to IUS
+- Drop APC virtual provides
 
 * Thu Feb 04 2016 Fedora Release Engineering <releng@fedoraproject.org> - 4.0.10-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_24_Mass_Rebuild
