@@ -191,7 +191,6 @@ cd NTS
 
 # Check than both extensions are reported (BC mode)
 %{_bindir}/php -n -d extension_dir=modules -d extension=apcu.so -m | grep 'apcu'
-%{_bindir}/php -n -d extension_dir=modules -d extension=apcu.so -m | grep 'apc$'
 
 # Upstream test suite for NTS extension
 TEST_PHP_EXECUTABLE=%{_bindir}/php \
@@ -204,7 +203,6 @@ REPORT_EXIT_STATUS=1 \
 cd ../ZTS
 
 %{__ztsphp}    -n -d extension_dir=modules -d extension=apcu.so -m | grep 'apcu'
-%{__ztsphp}    -n -d extension_dir=modules -d extension=apcu.so -m | grep 'apc$'
 
 # Upstream test suite for ZTS extension
 TEST_PHP_EXECUTABLE=%{__ztsphp} \
@@ -262,6 +260,7 @@ fi
 - Drop APC virtual provides
 - Configure with '--enable-apcu' per INSTALL file
 - Include apc.php in pecl_docdir of main package
+- Remove apc BC module load check
 
 * Thu Feb 04 2016 Fedora Release Engineering <releng@fedoraproject.org> - 4.0.10-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_24_Mass_Rebuild
