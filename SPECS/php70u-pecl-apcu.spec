@@ -171,6 +171,8 @@ install -D -m 644 package.xml %{buildroot}%{pecl_xmldir}/%{name}.xml
 # Pages
 install -D -m 644 -p NTS/apc.php  \
         %{buildroot}%{_datadir}/apcu-panel/index.php
+# Add apc.php to main package for user configured non Apache webservers
+install -D -m 644 -p NTS/apc.php  %{buildroot}%{pecl_docdir}/%{pecl_name}/apc.php
 # Apache config
 install -D -m 644 -p %{SOURCE2} \
         %{buildroot}%{_sysconfdir}/httpd/conf.d/apcu-panel.conf
@@ -263,6 +265,7 @@ fi
 - Port from Fedora to IUS
 - Drop APC virtual provides
 - Configure with '--enable-apcu' per INSTALL file
+- Include apc.php in pecl_docdir of main package
 
 * Thu Feb 04 2016 Fedora Release Engineering <releng@fedoraproject.org> - 4.0.10-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_24_Mass_Rebuild
