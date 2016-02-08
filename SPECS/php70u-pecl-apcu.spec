@@ -142,13 +142,13 @@ sed -e s:apc.conf.php:%{_sysconfdir}/apcu-panel/conf.php:g \
 %build
 cd NTS
 %{_bindir}/phpize
-%configure --with-php-config=%{_bindir}/php-config
+%configure --enable-apcu --with-php-config=%{_bindir}/php-config
 make %{?_smp_mflags}
 
 %if %{with_zts}
 cd ../ZTS
 %{_bindir}/zts-phpize
-%configure --with-php-config=%{_bindir}/zts-php-config
+%configure --enable-apcu --with-php-config=%{_bindir}/zts-php-config
 make %{?_smp_mflags}
 %endif
 
@@ -262,6 +262,7 @@ fi
 - Latest upstream
 - Port from Fedora to IUS
 - Drop APC virtual provides
+- Configure with '--enable-apcu' per INSTALL file
 
 * Thu Feb 04 2016 Fedora Release Engineering <releng@fedoraproject.org> - 4.0.10-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_24_Mass_Rebuild
