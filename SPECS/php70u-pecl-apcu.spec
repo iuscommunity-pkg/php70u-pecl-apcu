@@ -21,8 +21,8 @@
 
 Name:           php-pecl-apcu
 Summary:        APC User Cache
-Version:        4.0.10
-Release:        2%{?dist}
+Version:        5.1.3
+Release:        1%{?dist}
 Source0:        http://pecl.php.net/get/%{pecl_name}-%{version}.tgz
 Source1:        %{pecl_name}.ini
 Source2:        %{pecl_name}-panel.conf
@@ -267,6 +267,9 @@ fi
 
 
 %changelog
+* Mon Feb 08 2016 Carl George <carl.george@rackspace.com> - 5.1.3-1
+- Latest upstream
+
 * Thu Feb 04 2016 Fedora Release Engineering <releng@fedoraproject.org> - 4.0.10-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_24_Mass_Rebuild
 
