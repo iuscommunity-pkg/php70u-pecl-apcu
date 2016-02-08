@@ -1,3 +1,5 @@
+# IUS spec file for php56u-pecl-apcu, forked from:
+#
 # Fedora spec file for php-pecl-apcu
 #
 # Copyright (c) 2013-2015 Remi Collet
@@ -13,16 +15,13 @@
 
 %global pecl_name apcu
 %global with_zts  0%{?__ztsphp:1}
-%if "%{php_version}" < "5.6"
-%global ini_name  %{pecl_name}.ini
-%else
 %global ini_name  40-%{pecl_name}.ini
-%endif
+%global php_base php70u
 
-Name:           php-pecl-apcu
+Name:           %{php_base}-pecl-apcu
 Summary:        APC User Cache
 Version:        5.1.3
-Release:        1%{?dist}
+Release:        1.ius%{?dist}
 Source0:        http://pecl.php.net/get/%{pecl_name}-%{version}.tgz
 Source1:        %{pecl_name}.ini
 Source2:        %{pecl_name}-panel.conf
@@ -32,25 +31,31 @@ License:        PHP
 Group:          Development/Languages
 URL:            http://pecl.php.net/package/APCu
 
-BuildRequires:  php-devel
-BuildRequires:  php-pear
+BuildRequires:  %{php_base}-devel
+BuildRequires:  %{php_base}-pear
 BuildRequires:  pcre-devel
 
-Requires(post): %{__pecl}
-Requires(postun): %{__pecl}
-Requires:       php(zend-abi) = %{php_zend_api}
-Requires:       php(api) = %{php_core_api}
+Requires(post): %{php_base}-pear
+Requires(postun): %{php_base}-pear
+Requires:       %{php_base}(zend-abi) = %{php_zend_api}
+Requires:       %{php_base}(api) = %{php_core_api}
 
-Obsoletes:      php-apcu < 4.0.0-1
-Provides:       php-apcu = %{version}
-Provides:       php-apcu%{?_isa} = %{version}
-Provides:       php-pecl(apcu) = %{version}
-Provides:       php-pecl(apcu)%{?_isa} = %{version}
-%if 0%{?fedora} < 20 && 0%{?rhel} < 7
-Conflicts:      php-pecl-apc < 4
-%else
-Obsoletes:      php-pecl-apc < 4
-%endif
+# provide the stock name
+Provides:       php-pecl-%{pecl_name} = %{version}
+Provides:       php-pecl-%{pecl_name}%{?_isa} = %{version}
+
+# provide the stock and IUS names without pecl
+Provides:       php-%{pecl_name} = %{version}
+Provides:       php-%{pecl_name}%{?_isa} = %{version}
+Provides:       %{php_base}-%{pecl_name} = %{version}
+Provides:       %{php_base}-%{pecl_name}%{?_isa} = %{version}
+
+# provide the stock and IUS names in pecl() format
+Provides:       php-pecl(%{pecl_name}) = %{version}
+Provides:       php-pecl(%{pecl_name})%{?_isa} = %{version}
+Provides:       %{php_base}-pecl(%{pecl_name}) = %{version}
+Provides:       %{php_base}-pecl(%{pecl_name})%{?_isa} = %{version}
+
 # Same provides than APC, this is a drop in replacement
 Provides:       php-apc = %{version}
 Provides:       php-apc%{?_isa} = %{version}
@@ -58,6 +63,9 @@ Provides:       php-pecl-apc = %{version}
 Provides:       php-pecl-apc%{?_isa} = %{version}
 Provides:       php-pecl(APC) = %{version}
 Provides:       php-pecl(APC)%{?_isa} = %{version}
+
+# conflict with the stock name
+Conflicts:      php-pecl-%{pecl_name} < %{version}
 
 %if 0%{?fedora} < 20 && 0%{?rhel} < 7
 # Filter shared private
@@ -91,35 +99,29 @@ superior support for local storage of PHP variables.
 Summary:       APCu developer files (header)
 Group:         Development/Libraries
 Requires:      %{name}%{?_isa} = %{version}-%{release}
-Requires:      php-devel%{?_isa}
-%if 0%{?fedora} < 20 && 0%{?rhel} < 7
-Conflicts:     php-pecl-apc-devel < 4
-%else
-Obsoletes:     php-pecl-apc-devel < 4
-%endif
+Requires:      %{php_base}-devel%{?_isa}
 Provides:      php-pecl-apc-devel = %{version}-%{release}
 Provides:      php-pecl-apc-devel%{?_isa} = %{version}-%{release}
+Provides:      php-pecl-%{pecl_name}-devel = %{version}
+Provides:      php-pecl-%{pecl_name}-devel%{?_isa} = %{version}
+Conflicts:     php-pecl-%{pecl_name}-devel < %{version}
 
 %description devel
 These are the files needed to compile programs using APCu.
 
 
-%package -n apcu-panel
+%package panel
 Summary:       APCu control panel
 Group:         Applications/Internet
 BuildArch:     noarch
 Requires:      %{name} = %{version}-%{release}
-Requires:      mod_php
-Requires:      php-gd
-Requires:      httpd
-%if 0%{?fedora} < 20 && 0%{?rhel} < 7
-Conflicts:     apc-panel < 4
-%else
-Obsoletes:     apc-panel < 4
-%endif
+Requires:      mod_php70u
+Requires:      %{php_base}-gd
 Provides:      apc-panel = %{version}-%{release}
+Provides:      apcu-panel = %{version}
+Conflicts:     apcu-panel < %{version}
 
-%description -n apcu-panel
+%description panel
 This package provides the APCu control panel, with Apache
 configuration, available on http://localhost/apcu-panel/
 
@@ -258,7 +260,7 @@ fi
 %endif
 
 
-%files -n apcu-panel
+%files panel
 # Need to restrict access, as it contains a clear password
 %attr(550,apache,root) %dir %{_sysconfdir}/apcu-panel
 %config(noreplace) %{_sysconfdir}/apcu-panel/conf.php
@@ -267,8 +269,9 @@ fi
 
 
 %changelog
-* Mon Feb 08 2016 Carl George <carl.george@rackspace.com> - 5.1.3-1
+* Mon Feb 08 2016 Carl George <carl.george@rackspace.com> - 5.1.3-1.ius
 - Latest upstream
+- Port from Fedora to IUS
 
 * Thu Feb 04 2016 Fedora Release Engineering <releng@fedoraproject.org> - 4.0.10-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_24_Mass_Rebuild
