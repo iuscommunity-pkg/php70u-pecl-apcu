@@ -16,7 +16,7 @@
 
 Name:           %{php_base}-pecl-apcu
 Summary:        APC User Cache
-Version:        5.1.3
+Version:        5.1.4
 Release:        1.ius%{?dist}
 Source0:        http://pecl.php.net/get/%{pecl_name}-%{version}.tgz
 Source1:        %{pecl_name}.ini
@@ -254,6 +254,9 @@ fi
 
 
 %changelog
+* Fri May 13 2016 Ben Harper <ben.harper@rackspace.com> -  5.1.4-1.ius
+- Latest upstream
+
 * Mon Feb 08 2016 Carl George <carl.george@rackspace.com> - 5.1.3-1.ius
 - Latest upstream
 - Port from Fedora to IUS
