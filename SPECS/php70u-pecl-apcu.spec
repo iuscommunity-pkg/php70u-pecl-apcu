@@ -211,14 +211,18 @@ REPORT_EXIT_STATUS=1 \
 %endif
 
 
+%if 0%{?pecl_install:1}
 %post
 %{pecl_install} %{pecl_xmldir}/%{name}.xml >/dev/null || :
+%endif
 
 
+%if 0%{?pecl_uninstall:1}
 %postun
 if [ $1 -eq 0 ] ; then
     %{pecl_uninstall} %{pecl_name} >/dev/null || :
 fi
+%endif
 
 
 %files
@@ -254,6 +258,7 @@ fi
 %changelog
 * Thu Jun 16 2016 Carl George <carl.george@rackspace.com> - 5.1.5-2.ius
 - Clean up auto-provides filters
+- Wrap scriptlets in conditionals
 
 * Wed Jun 08 2016 Ben Harper <ben.harper@rackspace.com> - 5.1.5-1.ius
 - Latest upstream
