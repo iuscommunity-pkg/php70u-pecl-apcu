@@ -153,16 +153,16 @@ popd
 %install
 # Install the NTS stuff
 make -C NTS install INSTALL_ROOT=%{buildroot}
-install -D -m 644 %{SOURCE1} %{buildroot}%{php_inidir}/%{ini_name}
+install -D -m 644 -p %{SOURCE1} %{buildroot}%{php_inidir}/%{ini_name}
 
 %if %{with zts}
 # Install the ZTS stuff
 make -C ZTS install INSTALL_ROOT=%{buildroot}
-install -D -m 644 %{SOURCE1} %{buildroot}%{php_ztsinidir}/%{ini_name}
+install -D -m 644 -p %{SOURCE1} %{buildroot}%{php_ztsinidir}/%{ini_name}
 %endif
 
 # Install the package XML file
-install -D -m 644 package.xml %{buildroot}%{pecl_xmldir}/%{pecl_name}.xml
+install -D -m 644 -p package.xml %{buildroot}%{pecl_xmldir}/%{pecl_name}.xml
 
 # Install the Control Panel
 # Pages
@@ -261,6 +261,7 @@ fi
 - Wrap scriptlets in conditionals
 - Install package.xml as %%{pecl_name}.xml, not %%{name}.xml
 - Install license
+- Preserve timestamps when installing files
 
 * Wed Jun 08 2016 Ben Harper <ben.harper@rackspace.com> - 5.1.5-1.ius
 - Latest upstream
