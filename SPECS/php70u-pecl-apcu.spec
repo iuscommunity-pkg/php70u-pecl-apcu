@@ -17,7 +17,7 @@
 Name:           %{php_base}-pecl-apcu
 Summary:        APC User Cache
 Version:        5.1.5
-Release:        1.ius%{?dist}
+Release:        2.ius%{?dist}
 Source0:        http://pecl.php.net/get/%{pecl_name}-%{version}.tgz
 Source1:        %{pecl_name}.ini
 Source2:        %{pecl_name}-panel.conf
@@ -55,11 +55,9 @@ Provides:       %{php_base}-pecl(%{pecl_name})%{?_isa} = %{version}
 # conflict with the stock name
 Conflicts:      php-pecl-%{pecl_name} < %{version}
 
-%if 0%{?fedora} < 20 && 0%{?rhel} < 7
-# Filter shared private
-%{?filter_provides_in: %filter_provides_in %{_libdir}/.*\.so$}
+%{?filter_provides_in: %filter_provides_in %{php_extdir}/.*\.so$}
+%{?filter_provides_in: %filter_provides_in %{php_ztsextdir}/.*\.so$}
 %{?filter_setup}
-%endif
 
 
 %description
@@ -254,6 +252,9 @@ fi
 
 
 %changelog
+* Thu Jun 16 2016 Carl George <carl.george@rackspace.com> - 5.1.5-2.ius
+- Clean up auto-provides filters
+
 * Wed Jun 08 2016 Ben Harper <ben.harper@rackspace.com> - 5.1.5-1.ius
 - Latest upstream
 
