@@ -114,7 +114,7 @@ configuration, available on http://localhost/apcu-panel/
 %setup -qc
 mv %{pecl_name}-%{version} NTS
 
-cd NTS
+pushd NTS
 
 # Sanity check, really often broken
 extver=$(sed -n '/#define PHP_APCU_VERSION/{s/.* "//;s/".*$//;p}' php_apc.h)
@@ -122,7 +122,7 @@ if test "x${extver}" != "x%{version}"; then
    : Error: Upstream extension version is ${extver}, expecting %{version}.
    exit 1
 fi
-cd ..
+popd
 
 %if %{with zts}
 # duplicate for ZTS build
@@ -135,16 +135,18 @@ sed -e s:apc.conf.php:%{_sysconfdir}/apcu-panel/conf.php:g \
 
 
 %build
-cd NTS
+pushd NTS
 %{_bindir}/phpize
 %configure --enable-apcu --with-php-config=%{_bindir}/php-config
 make %{?_smp_mflags}
+popd
 
 %if %{with zts}
-cd ../ZTS
+pushd ZTS
 %{_bindir}/zts-phpize
 %configure --enable-apcu --with-php-config=%{_bindir}/zts-php-config
 make %{?_smp_mflags}
+popd
 %endif
 
 
@@ -176,20 +178,17 @@ install -D -m 644 -p %{SOURCE3} \
         %{buildroot}%{_sysconfdir}/apcu-panel/conf.php
 
 # Test & Documentation
-cd NTS
-for i in $(grep 'role="test"' ../package.xml | sed -e 's/^.*name="//;s/".*$//')
-do install -Dpm 644 $i %{buildroot}%{pecl_testdir}/%{pecl_name}/$i
+for i in $(grep 'role="test"' package.xml | sed -e 's/^.*name="//;s/".*$//')
+do install -Dpm 644 NTS/$i %{buildroot}%{pecl_testdir}/%{pecl_name}/$i
 done
-for i in $(grep 'role="doc"' ../package.xml | sed -e 's/^.*name="//;s/".*$//')
-do install -Dpm 644 $i %{buildroot}%{pecl_docdir}/%{pecl_name}/$i
+for i in $(grep 'role="doc"' package.xml | sed -e 's/^.*name="//;s/".*$//')
+do install -Dpm 644 NTS/$i %{buildroot}%{pecl_docdir}/%{pecl_name}/$i
 done
 
 
 %check
-cd NTS
-
 # Check than both extensions are reported (BC mode)
-%{_bindir}/php -n -d extension_dir=modules -d extension=apcu.so -m | grep 'apcu'
+%{_bindir}/php -n -d extension=%{buildroot}%{php_extdir}/apcu.so -m | grep 'apcu'
 
 # Upstream test suite for NTS extension
 TEST_PHP_EXECUTABLE=%{_bindir}/php \
@@ -199,9 +198,7 @@ REPORT_EXIT_STATUS=1 \
 %{_bindir}/php -n run-tests.php
 
 %if %{with zts}
-cd ../ZTS
-
-%{__ztsphp}    -n -d extension_dir=modules -d extension=apcu.so -m | grep 'apcu'
+%{__ztsphp} -n -d extension=%{buildroot}%{php_ztsextdir}/apcu.so -m | grep 'apcu'
 
 # Upstream test suite for ZTS extension
 TEST_PHP_EXECUTABLE=%{__ztsphp} \
