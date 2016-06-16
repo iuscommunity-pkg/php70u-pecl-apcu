@@ -227,6 +227,8 @@ fi
 
 
 %files
+%{!?_licensedir:%global license %%doc}
+%license NTS/LICENSE
 %doc %{pecl_docdir}/%{pecl_name}
 %{pecl_xmldir}/%{pecl_name}.xml
 
@@ -261,6 +263,7 @@ fi
 - Clean up auto-provides filters
 - Wrap scriptlets in conditionals
 - Install package.xml as %%{pecl_name}.xml, not %%{name}.xml
+- Install license
 
 * Wed Jun 08 2016 Ben Harper <ben.harper@rackspace.com> - 5.1.5-1.ius
 - Latest upstream
