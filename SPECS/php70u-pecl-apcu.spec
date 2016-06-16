@@ -193,25 +193,27 @@ done
 
 
 %check
+pushd NTS
 # Check than both extensions are reported (BC mode)
-%{__php} -n -d extension=%{buildroot}%{php_extdir}/apcu.so -m | grep 'apcu'
-
+%{__php} -n -d extension_dir=modules -d extension=apcu.so -m | grep 'apcu'
 # Upstream test suite for NTS extension
 TEST_PHP_EXECUTABLE=%{__php} \
 TEST_PHP_ARGS="-n -d extension_dir=$PWD/modules -d extension=%{pecl_name}.so" \
 NO_INTERACTION=1 \
 REPORT_EXIT_STATUS=1 \
 %{__php} -n run-tests.php
+popd
 
 %if %{with zts}
-%{__ztsphp} -n -d extension=%{buildroot}%{php_ztsextdir}/apcu.so -m | grep 'apcu'
-
+pushd ZTS
+%{__ztsphp} -n -d extension_dir=modules -d extension=apcu.so -m | grep 'apcu'
 # Upstream test suite for ZTS extension
 TEST_PHP_EXECUTABLE=%{__ztsphp} \
 TEST_PHP_ARGS="-n -d extension_dir=$PWD/modules -d extension=%{pecl_name}.so" \
 NO_INTERACTION=1 \
 REPORT_EXIT_STATUS=1 \
 %{__ztsphp} -n run-tests.php
+popd
 %endif
 
 
