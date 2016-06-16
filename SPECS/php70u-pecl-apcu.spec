@@ -10,9 +10,10 @@
 #
 
 %global pecl_name apcu
-%global with_zts  0%{?__ztsphp:1}
 %global ini_name  40-%{pecl_name}.ini
 %global php_base php70u
+
+%bcond_without zts
 
 Name:           %{php_base}-pecl-apcu
 Summary:        APC User Cache
@@ -123,7 +124,7 @@ if test "x${extver}" != "x%{version}"; then
 fi
 cd ..
 
-%if %{with_zts}
+%if %{with zts}
 # duplicate for ZTS build
 cp -pr NTS ZTS
 %endif
@@ -139,7 +140,7 @@ cd NTS
 %configure --enable-apcu --with-php-config=%{_bindir}/php-config
 make %{?_smp_mflags}
 
-%if %{with_zts}
+%if %{with zts}
 cd ../ZTS
 %{_bindir}/zts-phpize
 %configure --enable-apcu --with-php-config=%{_bindir}/zts-php-config
@@ -152,7 +153,7 @@ make %{?_smp_mflags}
 make -C NTS install INSTALL_ROOT=%{buildroot}
 install -D -m 644 %{SOURCE1} %{buildroot}%{php_inidir}/%{ini_name}
 
-%if %{with_zts}
+%if %{with zts}
 # Install the ZTS stuff
 make -C ZTS install INSTALL_ROOT=%{buildroot}
 install -D -m 644 %{SOURCE1} %{buildroot}%{php_ztsinidir}/%{ini_name}
@@ -197,7 +198,7 @@ NO_INTERACTION=1 \
 REPORT_EXIT_STATUS=1 \
 %{_bindir}/php -n run-tests.php
 
-%if %{with_zts}
+%if %{with zts}
 cd ../ZTS
 
 %{__ztsphp}    -n -d extension_dir=modules -d extension=apcu.so -m | grep 'apcu'
@@ -232,7 +233,7 @@ fi
 %config(noreplace) %{php_inidir}/%{ini_name}
 %{php_extdir}/%{pecl_name}.so
 
-%if %{with_zts}
+%if %{with zts}
 %{php_ztsextdir}/%{pecl_name}.so
 %config(noreplace) %{php_ztsinidir}/%{ini_name}
 %endif
@@ -242,7 +243,7 @@ fi
 %doc %{pecl_testdir}/%{pecl_name}
 %{php_incldir}/ext/%{pecl_name}
 
-%if %{with_zts}
+%if %{with zts}
 %{php_ztsincldir}/ext/%{pecl_name}
 %endif
 
