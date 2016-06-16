@@ -1,4 +1,4 @@
-# IUS spec file for php56u-pecl-apcu, forked from:
+# IUS spec file for php70u-pecl-apcu, forked from:
 #
 # Fedora spec file for php-pecl-apcu
 #
