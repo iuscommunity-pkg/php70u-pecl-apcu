@@ -112,6 +112,12 @@ configuration, available on http://localhost/apcu-panel/
 
 %prep
 %setup -qc
+
+# Don't install/register tests or LICENSE
+sed -e 's/role="test"/role="src"/' \
+    -e '/LICENSE/s/role="doc"/role="src"/' \
+    -i package.xml
+
 mv %{pecl_name}-%{version} NTS
 
 pushd NTS
@@ -239,7 +245,6 @@ fi
 
 
 %files devel
-%doc %{pecl_testdir}/%{pecl_name}
 %{php_incldir}/ext/%{pecl_name}
 
 %if %{with zts}
@@ -262,6 +267,7 @@ fi
 - Install package.xml as %%{pecl_name}.xml, not %%{name}.xml
 - Install license
 - Preserve timestamps when installing files
+- Don't install/register tests or LICENSE
 
 * Wed Jun 08 2016 Ben Harper <ben.harper@rackspace.com> - 5.1.5-1.ius
 - Latest upstream
