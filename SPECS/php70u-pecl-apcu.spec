@@ -100,7 +100,7 @@ Summary:       APCu control panel
 Group:         Applications/Internet
 BuildArch:     noarch
 Requires:      %{name} = %{version}-%{release}
-Requires:      mod_php70u
+Requires:      mod_%{php_base}
 Requires:      %{php_base}-gd
 Provides:      apcu-panel = %{version}
 Conflicts:     apcu-panel < %{version}
