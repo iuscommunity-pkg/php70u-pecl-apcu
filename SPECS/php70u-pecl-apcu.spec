@@ -17,8 +17,8 @@
 
 Name:           %{php_base}-pecl-apcu
 Summary:        APC User Cache
-Version:        5.1.5
-Release:        2.ius%{?dist}
+Version:        5.1.6
+Release:        1.ius%{?dist}
 Source0:        http://pecl.php.net/get/%{pecl_name}-%{version}.tgz
 Source1:        %{pecl_name}.ini
 Source2:        %{pecl_name}-panel.conf
@@ -263,6 +263,9 @@ fi
 
 
 %changelog
+* Thu Oct 06 2016 Ben Harper <ben.harper@rackspace.com> - 5.1.6-1.ius
+- Latest upstream
+
 * Thu Jun 16 2016 Carl George <carl.george@rackspace.com> - 5.1.5-2.ius
 - Clean up auto-provides filters
 - Wrap scriptlets in conditionals
