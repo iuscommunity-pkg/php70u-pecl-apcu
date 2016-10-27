@@ -17,7 +17,7 @@
 
 Name:           %{php_base}-pecl-apcu
 Summary:        APC User Cache
-Version:        5.1.6
+Version:        5.1.7
 Release:        1.ius%{?dist}
 Source0:        http://pecl.php.net/get/%{pecl_name}-%{version}.tgz
 Source1:        %{pecl_name}.ini
@@ -195,10 +195,10 @@ done
 %check
 pushd NTS
 # Check than both extensions are reported (BC mode)
-%{__php} -n -d extension_dir=modules -d extension=apcu.so -m | grep 'apcu'
+%{__php} -n -d extension=%{buildroot}%{php_extdir}/%{pecl_name}.so -m | grep 'apcu'
 # Upstream test suite for NTS extension
 TEST_PHP_EXECUTABLE=%{__php} \
-TEST_PHP_ARGS="-n -d extension_dir=$PWD/modules -d extension=%{pecl_name}.so" \
+TEST_PHP_ARGS="-n -d extension=%{buildroot}%{php_extdir}/%{pecl_name}.so" \
 NO_INTERACTION=1 \
 REPORT_EXIT_STATUS=1 \
 %{__php} -n run-tests.php
@@ -206,10 +206,10 @@ popd
 
 %if %{with zts}
 pushd ZTS
-%{__ztsphp} -n -d extension_dir=modules -d extension=apcu.so -m | grep 'apcu'
+%{__ztsphp} -n -d extension=%{buildroot}%{php_ztsextdir}/%{pecl_name}.so -m | grep 'apcu'
 # Upstream test suite for ZTS extension
 TEST_PHP_EXECUTABLE=%{__ztsphp} \
-TEST_PHP_ARGS="-n -d extension_dir=$PWD/modules -d extension=%{pecl_name}.so" \
+TEST_PHP_ARGS="-n -d extension=%{buildroot}%{php_ztsextdir}/%{pecl_name}.so" \
 NO_INTERACTION=1 \
 REPORT_EXIT_STATUS=1 \
 %{__ztsphp} -n run-tests.php
@@ -263,6 +263,9 @@ fi
 
 
 %changelog
+* Thu Oct 27 2016 Carl George <carl.george@rackspace.com> - 5.1.7-1.ius
+- Latest upstream
+
 * Thu Oct 06 2016 Ben Harper <ben.harper@rackspace.com> - 5.1.6-1.ius
 - Latest upstream
 
