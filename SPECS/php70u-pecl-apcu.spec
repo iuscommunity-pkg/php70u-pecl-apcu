@@ -17,7 +17,7 @@
 
 Name:           %{php_base}-pecl-apcu
 Summary:        APC User Cache
-Version:        5.1.8
+Version:        5.1.9
 Release:        1.ius%{?dist}
 Source0:        http://pecl.php.net/get/%{pecl_name}-%{version}.tgz
 Source1:        %{pecl_name}.ini
@@ -263,6 +263,9 @@ fi
 
 
 %changelog
+* Tue Jan 02 2018 Ben Harper <ben.harper@rackspace.com> - 5.1.9-1.ius
+- Latest upstream
+
 * Mon Jan 16 2017 Ben Harper <ben.harper@rackspace.com> - 5.1.8-1.ius
 - Latest upstream
 
